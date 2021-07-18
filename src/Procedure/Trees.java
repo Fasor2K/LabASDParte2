@@ -1,7 +1,7 @@
-package Algorithms;
+package Procedure;
 
 public interface Trees {
-    // Trees interface with methods in common for all trees
+    // Interfaccia con metodi condivisi da tutti gli alberi
     boolean insert(int key, String value);
     Node search(int key);
     void reset();

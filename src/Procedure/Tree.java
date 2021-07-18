@@ -1,10 +1,10 @@
-package Algorithms;
+package Procedure;
 
 public class Tree {
 
     protected Node root;
 
-    // Create an empty tree on init
+    // Crea un albero vuoto, stato iniziale
     public Tree() {
         root = Node.NIL;
     }

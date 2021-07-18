@@ -1,4 +1,4 @@
-package Algorithms;
+package Procedure;
 
 public class RedBlackTreeNode extends Node {
 

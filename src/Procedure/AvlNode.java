@@ -1,4 +1,4 @@
-package Algorithms;
+package Procedure;
 
 public class AvlNode extends Node {
     public static final AvlNode NIL = new AvlNode();
