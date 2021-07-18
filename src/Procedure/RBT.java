@@ -3,7 +3,7 @@ package Procedure;
 public class RBT extends Tree implements Trees {
     public RBT() {
         super();
-        root = RedBlackTreeNode.NIL;
+        root = RBTNode.NIL;
     }
 
 
@@ -11,12 +11,12 @@ public class RBT extends Tree implements Trees {
      * Esegue una rotazione a destra sul nodo passato come parametro
      * @param red nodo su cui effettuare la rotazione
      */
-    private void rotateRight(RedBlackTreeNode red) {
-        RedBlackTreeNode left = red.getLeft();
+    private void rotateRight(RBTNode red) {
+        RBTNode left = red.getLeft();
         //Il figlio destro del figlio sinistro di red diventa il figlio sinistro di red
         red.setLeft(left.getRight());
         //Se tale figlio non è nil, il suo genitore sarà red
-        if (!left.getRight().equals(RedBlackTreeNode.NIL)) {
+        if (!left.getRight().equals(RBTNode.NIL)) {
             left.getRight().setParent(red);
         }
         /*
@@ -25,7 +25,7 @@ public class RBT extends Tree implements Trees {
          */
         left.setParent(red.getParent());
         //Se il nodo red era la radice, allora la radice sarà il figlio sinistro di red
-        if (red.parent.equals(RedBlackTreeNode.NIL)) {
+        if (red.parent.equals(RBTNode.NIL)) {
             this.root = left;
         /*
         Visto che il nodo left prenderà il posto di red se red era figlio sinistro allora il figlio sinistro
@@ -45,14 +45,14 @@ public class RBT extends Tree implements Trees {
      * Esegue una rotazione a sinistra sul nodo passato come parametro
      * @param red nodo su cui effettuare la rotazione
      */
-    private void rotateLeft(RedBlackTreeNode red) {
-        RedBlackTreeNode right = red.getRight();
+    private void rotateLeft(RBTNode red) {
+        RBTNode right = red.getRight();
         red.setRight(right.getLeft());
-        if (!right.getLeft().equals(RedBlackTreeNode.NIL)) {
+        if (!right.getLeft().equals(RBTNode.NIL)) {
             right.getLeft().setParent(red);
         }
         right.setParent(red.getParent());
-        if (red.parent.equals(RedBlackTreeNode.NIL)) {
+        if (red.parent.equals(RBTNode.NIL)) {
             this.root = right;
         } else if (red.equals(red.getParent().getLeft())) {
             red.getParent().setLeft(right);
@@ -73,17 +73,17 @@ public class RBT extends Tree implements Trees {
      */
     @Override
     public boolean insert(int key, String value) {
-        insert(new RedBlackTreeNode(key, value));
+        insert(new RBTNode(key, value));
         return true;
     }
 
-    private void insert(RedBlackTreeNode z) {
+    private void insert(RBTNode z) {
 
-        RedBlackTreeNode y = RedBlackTreeNode.NIL;
-        RedBlackTreeNode x = (RedBlackTreeNode) root;
+        RBTNode y = RBTNode.NIL;
+        RBTNode x = (RBTNode) root;
 
         //Scendo nell'albero fino a trovare la posizione corretta per il nodo z da inserire
-        while (!x.equals(RedBlackTreeNode.NIL)) {
+        while (!x.equals(RBTNode.NIL)) {
             y = x;
             if (z.getKey() < x.getKey()) {
                 x = x.getLeft();
@@ -94,7 +94,7 @@ public class RBT extends Tree implements Trees {
         //y arriverà quindi ad essere il genitore di z
         z.setParent(y);
         //se y è nil (albero vuoto) allora z diventerà la radice dell'albero
-        if (y.equals(RedBlackTreeNode.NIL)) {
+        if (y.equals(RBTNode.NIL)) {
             root = z;
         //Decido se z sarà il figlio sinistro o destro di y in base alla sua chiave
         } else if (z.getKey() < y.getKey()) {
@@ -103,15 +103,15 @@ public class RBT extends Tree implements Trees {
             y.setRight(z);
         }
         //Se z è la radice la coloro di nero ed esco dalla procedura
-        if (z.getParent().equals(RedBlackTreeNode.NIL)) {
-            z.setColor(RedBlackTreeNode.BLACK);
+        if (z.getParent().equals(RBTNode.NIL)) {
+            z.setColor(RBTNode.BLACK);
             return;
         }
         /*
         Se il nonno di z è nil posso terminare qui la procedura, altrimenti chiamo la procedura FixInsert
         per risolvere eventuali errori di posizionamento/colorazione del nuovo nodo appena inserito
          */
-        if (z.getParent().getParent().equals(RedBlackTreeNode.NIL)) {
+        if (z.getParent().getParent().equals(RBTNode.NIL)) {
             return;
         }
         FixInsert(z);
@@ -122,9 +122,9 @@ public class RBT extends Tree implements Trees {
      * Tramite rotazioni e ricolorazioni risolve eventuali problemi sul nodo z
      * @param z nodo z su cui risolvere eventuali problemi
      */
-    private void FixInsert(RedBlackTreeNode z) {
-        RedBlackTreeNode uncle;
-        while (z.getParent().getColor() == RedBlackTreeNode.RED) {
+    private void FixInsert(RBTNode z) {
+        RBTNode uncle;
+        while (z.getParent().getColor() == RBTNode.RED) {
             //Se il genitore di z è un figlio destro, allora lo zio di z sarà figlio sinistro del nonno di z (fratello del padre di z)
             if (z.getParent().equals(z.getParent().getParent().getRight())) {
                 uncle = z.getParent().getParent().getLeft();
@@ -133,10 +133,10 @@ public class RBT extends Tree implements Trees {
                 Se lo zio di z è red lo coloro di nero, coloro poi il padre di z di nero ed il nonno di z di rosso.
                 Mi sposto poi sul nonno di z e ripeto le operazioni
                  */
-                if (uncle.getColor() == RedBlackTreeNode.RED) {
-                    uncle.setColor(RedBlackTreeNode.BLACK);
-                    z.getParent().setColor(RedBlackTreeNode.BLACK);
-                    z.getParent().getParent().setColor(RedBlackTreeNode.RED);
+                if (uncle.getColor() == RBTNode.RED) {
+                    uncle.setColor(RBTNode.BLACK);
+                    z.getParent().setColor(RBTNode.BLACK);
+                    z.getParent().getParent().setColor(RBTNode.RED);
                     z = z.getParent().getParent();
                 //else: zio di z è black
                 } else {
@@ -149,18 +149,18 @@ public class RBT extends Tree implements Trees {
                     Coloro poi il padre di z di nero, il nonno di z di rosso ed infine eseguo una rotazione
                     verso sinistra sul nonno di z
                      */
-                    z.getParent().setColor(RedBlackTreeNode.BLACK);
-                    z.getParent().getParent().setColor(RedBlackTreeNode.RED);
+                    z.getParent().setColor(RBTNode.BLACK);
+                    z.getParent().getParent().setColor(RBTNode.RED);
                     rotateLeft(z.getParent().getParent());
                 }
             //else: genitore di z è un figlio sinistro, lo zio di z sarà figlio destro del nonno di z (fratello del padre di z)
             } else {
                 //Le operazioni seguenti sono speculari a quelle viste in precedenza
                 uncle = z.getParent().getParent().getRight();
-                if (uncle.getColor() == RedBlackTreeNode.RED) {
-                    uncle.setColor(RedBlackTreeNode.BLACK);
-                    z.getParent().setColor(RedBlackTreeNode.BLACK);
-                    z.getParent().getParent().setColor(RedBlackTreeNode.RED);
+                if (uncle.getColor() == RBTNode.RED) {
+                    uncle.setColor(RBTNode.BLACK);
+                    z.getParent().setColor(RBTNode.BLACK);
+                    z.getParent().getParent().setColor(RBTNode.RED);
                     z = z.getParent().getParent();
 
                 } else {
@@ -168,8 +168,8 @@ public class RBT extends Tree implements Trees {
                         z = z.getParent();
                         rotateLeft(z);
                     }
-                    z.getParent().setColor(RedBlackTreeNode.BLACK);
-                    z.getParent().getParent().setColor(RedBlackTreeNode.RED);
+                    z.getParent().setColor(RBTNode.BLACK);
+                    z.getParent().getParent().setColor(RBTNode.RED);
                     rotateRight(z.getParent().getParent());
                 }
 
@@ -180,7 +180,7 @@ public class RBT extends Tree implements Trees {
             }
         }
         //La radice dell'RBT deve essere necessariamente black
-        ((RedBlackTreeNode) root).setColor(RedBlackTreeNode.BLACK);
+        ((RBTNode) root).setColor(RBTNode.BLACK);
     }
 
 
@@ -209,6 +209,6 @@ public class RBT extends Tree implements Trees {
 
     @Override
     public void reset() {
-        this.root = RedBlackTreeNode.NIL;
+        this.root = RBTNode.NIL;
     }
 }
