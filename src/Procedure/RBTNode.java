@@ -2,12 +2,16 @@ package Procedure;
 
 public class RBTNode extends Node {
 
+    public enum Color{
+        RED, BLACK
+    }
+
     public static final RBTNode NIL = new RBTNode();
 
-    private byte color;
+    private Color color;
 
-    public final static byte RED    = 0x0;
-    public final static byte BLACK  = 0x1;
+    public final static Color RED    = Color.RED;
+    public final static Color BLACK  = Color.BLACK;
 
     public RBTNode() {
         super();
@@ -34,11 +38,11 @@ public class RBTNode extends Node {
         return ((RBTNode) super.getParent());
     }
 
-    public byte getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(byte color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 }

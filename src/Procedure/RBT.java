@@ -124,7 +124,7 @@ public class RBT extends Tree implements Trees {
      */
     private void FixInsert(RBTNode z) {
         RBTNode uncle;
-        while (z.getParent().getColor() == RBTNode.RED) {
+        while (z.getParent().getColor()!=null && z.getParent().getColor().equals(RBTNode.RED)) {
             //Se il genitore di z è un figlio destro, allora lo zio di z sarà figlio sinistro del nonno di z (fratello del padre di z)
             if (z.getParent().equals(z.getParent().getParent().getRight())) {
                 uncle = z.getParent().getParent().getLeft();
@@ -133,7 +133,7 @@ public class RBT extends Tree implements Trees {
                 Se lo zio di z è red lo coloro di nero, coloro poi il padre di z di nero ed il nonno di z di rosso.
                 Mi sposto poi sul nonno di z e ripeto le operazioni
                  */
-                if (uncle.getColor() == RBTNode.RED) {
+                if (uncle.getColor()!=null && uncle.getColor().equals(RBTNode.RED)) {
                     uncle.setColor(RBTNode.BLACK);
                     z.getParent().setColor(RBTNode.BLACK);
                     z.getParent().getParent().setColor(RBTNode.RED);
@@ -157,7 +157,7 @@ public class RBT extends Tree implements Trees {
             } else {
                 //Le operazioni seguenti sono speculari a quelle viste in precedenza
                 uncle = z.getParent().getParent().getRight();
-                if (uncle.getColor() == RBTNode.RED) {
+                if (uncle.getColor()!=null && uncle.getColor().equals(RBTNode.RED)) {
                     uncle.setColor(RBTNode.BLACK);
                     z.getParent().setColor(RBTNode.BLACK);
                     z.getParent().getParent().setColor(RBTNode.RED);
@@ -210,5 +210,26 @@ public class RBT extends Tree implements Trees {
     @Override
     public void reset() {
         this.root = RBTNode.NIL;
+    }
+
+    @Override
+    public String preOrderVisit() {
+        return preOrderRec((RBTNode) root);
+    }
+
+    private String preOrderRec(RBTNode x){
+        String color;
+        if(x.equals(Node.NIL)){
+            return "NULL ";
+        }
+        else{
+            if(x.getColor().equals(RBTNode.BLACK)){
+                color="black";
+            }
+            else{
+                color="red";
+            }
+            return x.getKey()+":"+x.getValue()+":"+color+" "+ preOrderRec(x.getLeft())+ preOrderRec(x.getRight());
+        }
     }
 }

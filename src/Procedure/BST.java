@@ -69,6 +69,20 @@ public class BST extends Tree implements Trees {
     }
 
     @Override
+    public String preOrderVisit(){
+        return preOrderRec(root).trim();
+    }
+
+    private String preOrderRec(Node x){
+        if(x.equals(Node.NIL)){
+            return "NULL ";
+        }
+        else{
+            return x.getKey()+":"+x.getValue()+" "+ preOrderRec(x.getLeft())+ preOrderRec(x.getRight());
+        }
+    }
+
+    @Override
     public void reset() {
         this.root = Node.NIL;
     }

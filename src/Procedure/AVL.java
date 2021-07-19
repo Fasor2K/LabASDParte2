@@ -166,4 +166,18 @@ public class AVL extends Tree implements Trees {
     public void reset() {
         this.root = (AvlNode) AvlNode.NIL;
     }
+
+    @Override
+    public String preOrderVisit() {
+        return preOrderRec((AvlNode) root);
+    }
+
+    private String preOrderRec(AvlNode x){
+        if(x.equals(Node.NIL)){
+            return "NULL ";
+        }
+        else{
+            return x.getKey()+":"+x.getValue()+":"+x.getHeight()+" "+preOrderRec(x.getLeft())+preOrderRec(x.getRight());
+        }
+    }
 }
