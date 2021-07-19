@@ -1,6 +1,7 @@
 package Procedure;
 
-public class AVL extends Tree implements Trees {
+public class AVL implements Trees {
+    protected Node root;
     public AVL() {
         root = (AvlNode) AvlNode.NIL;
     }

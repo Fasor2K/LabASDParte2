@@ -1,8 +1,8 @@
 package Procedure;
 
-public class RBT extends Tree implements Trees {
+public class RBT implements Trees {
+    protected Node root;
     public RBT() {
-        super();
         root = RBTNode.NIL;
     }
 

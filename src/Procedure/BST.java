@@ -1,8 +1,9 @@
 package Procedure;
 
-public class BST extends Tree implements Trees {
+public class BST implements Trees {
+    protected Node root;
     public BST() {
-        super();
+        root=Node.NIL;
     }
 
 
