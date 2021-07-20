@@ -71,7 +71,6 @@ public class TimesRecording {
         for (int k = 0; k < internalIterations; k++) {
             nums=randomArray.newArray(op);
             resolution=getResolution();
-            //tree.reset();
 
             start=System.nanoTime();
 
