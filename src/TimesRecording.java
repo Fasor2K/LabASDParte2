@@ -8,13 +8,17 @@ import java.util.ArrayList;
 public class TimesRecording {
 
     private static String textToFile;
-    private static final int internalIterations = 50, minRep = 1000,maxRep = 1000000,iterations = 100;
+    private static final int internalIterations = 50, minRep = 1000,maxRep = 1000000, totalIterations = 100;
     private static final double E = 0.01;
 
     public static void main(String args[]){
         timesOnFile();
     }
 
+    /**
+     * Chiama la procedura privata timesRecorder per ogni albero e scrive su file i risultati, ripete tutto
+     * totalIterations volte
+     */
     public static void timesOnFile(){
         double base;
         int operations;
@@ -24,12 +28,16 @@ public class TimesRecording {
         RBT rbt = new RBT();
 
         String path="data.txt";
+        /*
+        Eseguo una scrittura vuota sul file in modo tale che la funzione mi restituisca l'effettivo nome del file,
+        in caso data.txt sia già presente nel disco
+         */
         path=writeFile(path,"",true);
 
-        for(int i=0;i<iterations;i++){
+        for(int i = 0; i< totalIterations; i++){
             textToFile="";
             //Determino il numero di ripetizioni delle operazioni di ricerca/inserimento
-            base = Math.exp((Math.log(maxRep) - Math.log(minRep)) / (iterations - 1));
+            base = Math.exp((Math.log(maxRep) - Math.log(minRep)) / (totalIterations - 1));
             operations = (int) ((double) minRep * Math.pow(base, i));
             textToFile+=operations+" ";
 
@@ -41,23 +49,34 @@ public class TimesRecording {
         }
     }
 
+    /**
+     * Esegue le rilevazioni dei tempi per un albero in particolare. Il numero di interi da cercare/inserire viene passato
+     * come parametro alla funzione. Dato tale valore, la funzione genera ad ogni iterazione un vettore di interi randomici
+     * che sarà oggetto delle operazioni che svolgeremo sull'albero. Per ogni vettore le misurazioni vengono ripetute finchè
+     * non si raggiunge il tempo minimo misurabile dalla macchina. Una volta terminate le misurazioni il tempo ammortizzato
+     * e la deviazione standard vengono inseriti nella stringa textToFile che verrà poi scritta su file
+     * @param tree albero su cui effettuare le operazioni
+     * @param op dimensione nel vettore randomico, corrisponde al numero di interi che andremo a cercare/inserire nell'albero
+     */
     private static void timesRecorder(Trees tree,int op){
-        double deviation = 0.0,totalTime = 0.0,resolution;
+        double standardDeviation = 0.0,totalTime = 0.0,resolution;
         double start, end,actualTime;
         //c = iterazioni del ciclo do-while
         //c1 = numero di inserimenti effettuati durante execute
         int c = 0, c1=0;
         int[] nums;
+        //ArrayList dove salverò il tempo di ogni iterazione per calcolare la deviazione standard
         ArrayList<Double> tempMemory = new ArrayList<>();
         RandomArray randomArray=new RandomArray();
         for (int k = 0; k < internalIterations; k++) {
             nums=randomArray.newArray(op);
             resolution=getResolution();
-            tree.reset();
+            //tree.reset();
 
             start=System.nanoTime();
 
             do {
+                tree.reset();
                 for (int i = 0; i < nums.length; i++) {
                     if (tree.search(nums[i]).equals(Node.NIL)) {
                         tree.insert(nums[i], "test" + i);
@@ -80,13 +99,21 @@ public class TimesRecording {
 
         //Varianza
         for (Double time : tempMemory) {
-            deviation += Math.pow(time - ammortisedTime, 2);
+            standardDeviation += Math.pow(time - ammortisedTime, 2);
         }
-        deviation = (Math.sqrt(deviation / internalIterations));
-        textToFile+=deviation + " ";
+        standardDeviation = (Math.sqrt(standardDeviation / internalIterations));
+        textToFile+=standardDeviation + " ";
     }
 
 
+    /**
+     * Scrive su file una stringa passata come parametro, è in grado di creare il file se esplicitamente richiesto.
+     * Se il file è gia esistente, modifica il nome del file finchè non ne trova uno non ancora utilizzato
+     * @param path Percorso del file desiderato
+     * @param text Testo da scrivere nel file
+     * @param create Booleano che mi consente di decidere se il file va creato oppure se devo scrivere in coda ad un file già esistente
+     * @return Eventuale nuovo percorso del file se quello desiderato (parametro path) è già in uso
+     */
     private static String writeFile(String path,String text,boolean create){
         File f=new File(path);
         FileWriter fw;
